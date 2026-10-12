@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-SendSoon MCP は [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) サーバーです。Codex および Claude から [SendSoon](https://sendsoonai.com/) のメール送信、IP 検索、ローカル文書の Markdown 変換を利用できます。
+SendSoon MCP は [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) サーバーです。Codex、Claude、WorkBuddy から [SendSoon](https://sendsoonai.com/) のメール送信、IP 検索、ローカル文書の Markdown 変換を利用できます。
 
 一度設定すれば、あとは自然言語で依頼するだけです。通常、毎回 SendSoon を指定する必要はありません。
 
@@ -36,7 +36,7 @@ sendsoon MCP を使ってこのタスクを完了してください。
 
 ## AI クライアントへのインストール
 
-以下は **Codex** と **Claude Desktop** 向けです。
+以下は **Codex**、**Claude Desktop**、**WorkBuddy** 向けです。
 
 ### Codex
 
@@ -83,6 +83,40 @@ Claude Desktop 内の `Settings > Developer > Edit Config` から直接編集す
 **確認：** 保存後、**完全に終了**して Claude Desktop を再起動します（トレイアイコンも終了）。新しい会話を開始し、tools メニューまたは設定で `sendsoon` が利用可能か確認します。
 
 **初回利用：** 初回のツール実行時にアクセス許可を求められる場合があります。許可して続行してください。
+
+### WorkBuddy
+
+WorkBuddy の **MCP Server Management** にコネクタ JSON を直接貼り付けて SendSoon を追加できます。
+
+**設定ファイル：** `%USERPROFILE%\.workbuddy-ai\mcp.json`（Windows）または `~/.workbuddy-ai/mcp.json`（macOS / Linux）。
+
+1. WorkBuddy を開き、**MCP Server Management** に進みます。
+2. **Add MCP** をクリックします。
+3. 次の JSON をエディタに貼り付けます。Key がある場合は `SENDSOON_API_KEY` に入力し、未登録で試す場合は空欄のままにします。
+4. **Save** をクリックします。
+
+```json
+{
+  "mcpServers": {
+    "sendsoon": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sendsoon/mcp"
+      ],
+      "env": {
+        "SENDSOON_API_KEY": ""
+      }
+    }
+  }
+}
+```
+
+![WorkBuddy MCP Server Management で SendSoon コネクタ JSON を直接設定](docs/images/workbuddy-mcp-config.png)
+
+スクリーンショットは WorkBuddy のコネクタ編集画面です。上部に設定ファイルのパス、エディタに `sendsoon` の JSON が表示されています。保存後、MCP 一覧に戻り `sendsoon` が接続されていることを確認してください。
+
+**確認：** 新しい会話で簡単なタスク（例：「8.8.8.8 の IP 情報を調べて」）を依頼します。ツール許可を求められたら許可してください。
 
 ## 設定値を準備
 

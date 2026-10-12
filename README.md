@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-SendSoon MCP is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that lets Codex and Claude use [SendSoon](https://sendsoonai.com/) capabilities: send email, look up public IPs, and convert local documents to Markdown.
+SendSoon MCP is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that lets Codex, Claude, and WorkBuddy use [SendSoon](https://sendsoonai.com/) capabilities: send email, look up public IPs, and convert local documents to Markdown.
 
 Configure it once, then describe tasks in natural language. You usually do not need to mention SendSoon in every prompt.
 
@@ -36,7 +36,7 @@ Use the sendsoon MCP to complete this task.
 
 ## Install in your AI client
 
-The instructions below cover **Codex** and **Claude Desktop**.
+The instructions below cover **Codex**, **Claude Desktop**, and **WorkBuddy**.
 
 ### Codex
 
@@ -83,6 +83,40 @@ You can also open `Settings > Developer > Edit Config` inside Claude Desktop.
 **Verify:** Save the file, **fully quit** Claude Desktop (including the system tray), then relaunch. Start a new chat and confirm `sendsoon` tools appear in the tools menu or settings.
 
 **First use:** Claude may ask to approve tool access on the first invocation; allow it to continue.
+
+### WorkBuddy
+
+WorkBuddy can add SendSoon by pasting the connector JSON directly in **MCP Server Management**.
+
+**Config file:** `%USERPROFILE%\.workbuddy-ai\mcp.json` (Windows) or `~/.workbuddy-ai/mcp.json` (macOS / Linux).
+
+1. Open WorkBuddy and go to **MCP Server Management**.
+2. Click **Add MCP**.
+3. Paste the JSON below into the editor. Fill in `SENDSOON_API_KEY` if you have a Key; leave it empty for the anonymous trial.
+4. Click **Save**.
+
+```json
+{
+  "mcpServers": {
+    "sendsoon": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sendsoon/mcp"
+      ],
+      "env": {
+        "SENDSOON_API_KEY": ""
+      }
+    }
+  }
+}
+```
+
+![WorkBuddy MCP Server Management with the SendSoon connector JSON](docs/images/workbuddy-mcp-config.png)
+
+The screenshot shows the WorkBuddy connector editor: the configuration file path is at the top, and the `sendsoon` JSON is pasted into the editor. After saving, return to the MCP list and confirm `sendsoon` is connected.
+
+**Verify:** Start a new conversation and ask for a simple task (e.g. “Look up 8.8.8.8”). Approve the tool if WorkBuddy asks for permission.
 
 ## Prepare the configuration
 
